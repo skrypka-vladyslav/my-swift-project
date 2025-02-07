@@ -1,5 +1,5 @@
 import SwiftUI
-
+@available(macOS 11.0, *)
 struct SettingsView: View {
     @State private var isDarkMode = false
     @State private var selectedLanguage = "ru"
