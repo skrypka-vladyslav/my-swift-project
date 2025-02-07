@@ -8,7 +8,7 @@ let package = Package(
         .iOS(.v18)  // Указана минимальная версия iOS
     ],
     products: [
-        .iOSApplication(  // Используется .iOSApplication вместо .app
+        .application(  // Используем .application вместо .iOSApplication
             name: "My App",
             targets: ["AppModule"]
         ),
