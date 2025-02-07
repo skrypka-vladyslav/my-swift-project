@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "my-swift-project",
     platforms: [
-        .iOS(.v9)  // Устанавливаем минимальную версию iOS
+        .iOS(.v9)  // Минимальная версия iOS
     ],
     products: [
         .library(
@@ -15,7 +15,7 @@ let package = Package(
     targets: [
         .target(
             name: "my-swift-project",
-            dependencies: []
+            path: "."  // Указываем путь к текущей директории для поиска исходников
         ),
         .testTarget(
             name: "my-swift-projectTests",
