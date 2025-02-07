@@ -3,19 +3,19 @@ workflows:
     name: Build iOS app
     max_build_duration: 60
     environment:
-      xcode: latest  # Указываем, что используем Xcode для сборки
+      xcode: latest
     scripts:
       - name: Build the app
         script: |
           # Сборка проекта с использованием Xcode и создания архива .ipa
           xcodebuild clean archive \
-            -project "my-swift-project.xcodeproj" \  # Используем .xcodeproj вместо .xcworkspace
-            -scheme "my-swift-project" \  # Указываем правильную схему
+            -project "my-swift-project.xcodeproj" \
+            -scheme "my-swift-project" \
             -sdk iphoneos \
             -archivePath "$PWD/build/my-swift-project.xcarchive"
       - name: Export IPA
         script: |
-          # Экспорт .ipa файла из .xcarchive без использования ExportOptions.plist
+          # Экспорт .ipa файла из .xcarchive
           xcodebuild -exportArchive \
             -archivePath "$PWD/build/my-swift-project.xcarchive" \
             -exportPath "$PWD/build/ios/iphoneos"
