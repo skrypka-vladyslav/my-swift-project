@@ -1,24 +1,20 @@
-version: 1.0
 workflows:
   ios:
     name: iOS Build Workflow
     max_build_duration: 60
-    ios:
-      version: 16.0  # Минимальная версия iOS (можно изменить)
     environment:
       vars:
-        FLAVOR: 'production'  # Можно указать доп. переменные окружения, если нужно
+        FLAVOR: 'production'
+      xcode: latest  # Используем последнюю версию Xcode
     scripts:
       - name: Install dependencies
         script: |
-          # Установка CocoaPods (если используется)
           gem install cocoapods
           pod install || echo "No Pods to install"
 
       - name: Build and Test
         script: |
-          # Сборка проекта через Xcode
           xcodebuild -workspace my-swift-project.xcworkspace -scheme my-swift-project clean build | tee result.log
 
     artifacts:
-      - build/my-swift-project.ipa  # Путь к .ipa файлу после сборки
+      - build/ios/ipa/*.ipa  # Кодемэджик сам найдёт .ipa
