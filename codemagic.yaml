@@ -8,23 +8,21 @@ workflows:
       - name: Install dependencies
         script: |
           # Установки зависимостей с использованием CocoaPods, если они есть
-          # Если у вас используется CocoaPods, вы можете раскомментировать и добавить команду установки зависимостей:
-          # pod install
           echo "No dependencies for Swift project"
       - name: Build the app
         script: |
           # Сборка проекта с использованием Xcode и создания архива .ipa
           xcodebuild clean archive \
-            -workspace "MyManicureApp.xcworkspace" \
-            -scheme "MyManicureApp" \
+            -workspace "my-swift-project.xcworkspace" \
+            -scheme "my-swift-project" \
             -sdk iphoneos \
-            -archivePath "$PWD/build/MyManicureApp.xcarchive"
+            -archivePath "$PWD/build/my-swift-project.xcarchive"
       - name: Export IPA
         script: |
           # Экспорт .ipa файла из .xcarchive
           xcodebuild -exportArchive \
-            -archivePath "$PWD/build/MyManicureApp.xcarchive" \
-            -exportOptionsPlist "$PWD/MyManicureApp/ExportOptions.plist" \
+            -archivePath "$PWD/build/my-swift-project.xcarchive" \
+            -exportOptionsPlist "$PWD/my-swift-project/ExportOptions.plist" \
             -exportPath "$PWD/build/ios/iphoneos"
     artifacts:
       - build/ios/iphoneos/*.ipa  # Указываем путь для артефактов
