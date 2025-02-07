@@ -1,20 +1,17 @@
 workflows:
   ios:
-    name: iOS Build Workflow
+    name: Build iOS app without Xcode project
     max_build_duration: 60
     environment:
-      vars:
-        FLAVOR: 'production'
-      xcode: latest  # Используем последнюю версию Xcode
+      xcode: latest
     scripts:
       - name: Install dependencies
         script: |
-          gem install cocoapods
-          pod install || echo "No Pods to install"
-
-      - name: Build and Test
+          # Установки зависимостей для Swift (если есть)
+          echo "No dependencies for Swift project"
+      - name: Build the app
         script: |
-          xcodebuild -workspace my-swift-project.xcworkspace -scheme my-swift-project clean build | tee result.log
-
+          # Сборка приложения с использованием Swift команд
+          swift build
     artifacts:
-      - build/ios/ipa/*.ipa  # Кодемэджик сам найдёт .ipa
+      - build/ios/iphoneos/*.ipa
