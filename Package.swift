@@ -1,25 +1,38 @@
-// swift-tools-version: 5.9
-
 import PackageDescription
+import AppleProductTypes
 
 let package = Package(
     name: "My App",
     platforms: [
-        .iOS(.v18)  // Указана минимальная версия iOS
+        .iOS("18.0")
     ],
     products: [
-        .application(  // Используем .application вместо .iOSApplication
+        .iOSApplication(
             name: "My App",
-            targets: ["AppModule"]
-        ),
+            targets: ["AppModule"],
+            displayVersion: "1.0",
+            bundleVersion: "1",
+            appIcon: .placeholder(icon: .moon),
+            accentColor: .presetColor(.teal),
+            supportedDeviceFamilies: [
+                .pad,
+                .phone
+            ],
+            supportedInterfaceOrientations: [
+                .portrait,
+                .landscapeRight,
+                .landscapeLeft,
+                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
+            ]
+        )
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "AppModule",
-            path: ".",  // Указание пути к основным файлам проекта
+            path: ".",
             swiftSettings: [
-                .enableUpcomingFeature("BareSlashRegexLiterals")  // Если необходимо для проекта
+                .enableUpcomingFeature("BareSlashRegexLiterals")
             ]
-        ),
+        )
     ]
 )
