@@ -9,7 +9,7 @@ struct DateTimeSelectionView: View {
     
     var body: some View {
         VStack {
-            if #available(macOS 10.15, iOS 13.0, *) {
+            if #available(macOS 11.0, iOS 14.0, *) { // Используем macOS 11 и iOS 14 и выше для DatePicker
                 DatePicker("Выберите дату", selection: $selectedDate, in: Date()..., displayedComponents: .date)
                     .padding()
             } else {
