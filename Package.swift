@@ -5,10 +5,10 @@ import PackageDescription
 let package = Package(
     name: "My App",
     platforms: [
-        .iOS(.v18)  // Указываем минимальную версию iOS
+        .iOS(.v18)  // Указана минимальная версия iOS
     ],
     products: [
-        .app(
+        .iOSApplication(  // Используется .iOSApplication вместо .app
             name: "My App",
             targets: ["AppModule"]
         ),
@@ -16,9 +16,9 @@ let package = Package(
     targets: [
         .target(
             name: "AppModule",
-            path: ".",  // Указываем путь к основной директории проекта
+            path: ".",  // Указание пути к основным файлам проекта
             swiftSettings: [
-                .enableUpcomingFeature("BareSlashRegexLiterals")  // Если это необходимо для проекта
+                .enableUpcomingFeature("BareSlashRegexLiterals")  // Если необходимо для проекта
             ]
         ),
     ]
