@@ -1,16 +1,14 @@
 workflows:
   ios:
-    name: iOS Build
-    max_build_duration: 60
+    name: iOS Build and Deploy
     environment:
-      flutter: stable
-      xcode: latest
+      xcode: latest  # Использовать последнюю стабильную версию Xcode с встроенным Swift
     scripts:
-      - name: Install Swift
+      - name: Install dependencies
         script: |
-          curl -s https://get.sdkman.io | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install swift
-      - name: Build
+          echo "Installing dependencies..."
+          swift package resolve  # Это разрешит зависимости Swift
+      - name: Build the app
         script: |
-          swift build
+          echo "Building the app..."
+          swift build  # Стандартная команда для сборки проекта с помощью Swift
