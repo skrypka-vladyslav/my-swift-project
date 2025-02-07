@@ -2,14 +2,13 @@ workflows:
   ios:
     name: iOS Workflow
     instance_type: mac_mini
-    max_build_duration: 60  # Максимальное время сборки
+    max_build_duration: 60
     environment:
       vars:
-        MY_VAR: 'value'  # Переменные окружения, если нужно
+        MY_VAR: 'value'
 
-    # Этапы скриптов сборки
     scripts:
-      # Шаг 1: Устанавливаем зависимости с помощью Swift Package Manager
+      # Шаг 1: Установка зависимостей через Swift Package Manager
       - name: Resolve Swift dependencies
         script: |
           swift package resolve
@@ -19,7 +18,7 @@ workflows:
         script: |
           swift build
 
-      # Шаг 3: Архивация приложения с использованием xcodebuild
+      # Шаг 3: Архивация приложения через xcodebuild
       - name: Archive app with xcodebuild
         script: |
           xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
@@ -29,7 +28,17 @@ workflows:
         script: |
           xcodebuild -exportArchive -archivePath $PWD/build/my-swift-project.xcarchive -exportOptionsPlist $PWD/ExportOptions.plist -exportPath $PWD/build
 
-      # Шаг 5: Загрузка IPA как артефакт сборки
+      # Шаг 5: Проверка наличия IPA
+      - name: Check if IPA file exists
+        script: |
+          if [ -f "$PWD/build/my-swift-project.ipa" ]; then
+            echo "IPA file found!"
+          else
+            echo "IPA file not found!"
+            exit 1
+          fi
+
+      # Шаг 6: Загрузка IPA как артефакт
       - name: Upload IPA as build artifact
         script: |
           echo "Uploading IPA artifact"
