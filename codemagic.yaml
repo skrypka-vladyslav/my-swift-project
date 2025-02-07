@@ -1,14 +1,20 @@
 workflows:
-  ios:
-    name: iOS Build and Deploy
+  ios_build:
+    name: iOS build
+    max_build_duration: 120
     environment:
-      xcode: latest  # Использовать последнюю стабильную версию Xcode с встроенным Swift
+      vars:
+        XCODE_VERSION: "13.2.1"
+        FLUTTER_CHANNEL: "stable"
     scripts:
       - name: Install dependencies
         script: |
-          echo "Installing dependencies..."
-          swift package resolve  # Это разрешит зависимости Swift
-      - name: Build the app
+          git clone https://github.com/flutter/flutter.git /flutter
+          export PATH=$PATH:/flutter/bin
+          flutter doctor
+      - name: Build app
         script: |
-          echo "Building the app..."
-          swift build  # Стандартная команда для сборки проекта с помощью Swift
+          swift build
+      - name: Export IPA
+        script: |
+          xcodebuild archive -scheme "my-swift-project" -workspace "my-swift-project.xcworkspace" -sdk iphoneos -archivePath $CM_BUILD_DIR/my-swift-project.xcarchive
