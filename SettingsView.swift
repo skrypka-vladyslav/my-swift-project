@@ -47,7 +47,7 @@ struct SettingsView: View {
             if let error = error {
                 print("Ошибка при планировании уведомления: \(error.localizedDescription)")
             } else {
-                print("⚡ Уведомление запланировано для курса \(course)!")
+                print("⚡️ Уведомление запланировано для курса \(course)!")
             }
         }
     }
@@ -78,7 +78,7 @@ struct SettingsView: View {
                     .font(.headline)
                     .padding()
                 
-                List(courses, id: \.self, selection: $selectedCourses) { course in
+                List(courses, id: \.self) { course in
                     HStack {
                         Text(course)
                         Spacer()
@@ -105,9 +105,9 @@ struct SettingsView: View {
                         for course in selectedCourses {
                             scheduleCriticalNotification(for: course, at: notificationTime)
                         }
-                        alertMessage = "⚡ Критические напоминания установлены!"
+                        alertMessage = "⚡️ Критические напоминания установлены!"
                     }
-                    showAlert = true
+showAlert = true
                 }) {
                     Text("Установить напоминания")
                         .padding()
@@ -141,4 +141,3 @@ struct SettingsView_Previews: PreviewProvider {
         SettingsView(isDarkMode: .constant(false), selectedLanguage: .constant("ru"))
     }
 }
-
