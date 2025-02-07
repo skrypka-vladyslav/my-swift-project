@@ -3,19 +3,20 @@ workflows:
     name: Build iOS App with Swift Package Manager
     max_build_duration: 60
     scripts:
-      # 1. Устанавливаем зависимости через Swift Package Manager
+      # Устанавливаем зависимости через Swift Package Manager
       - name: Install dependencies with SPM
         script: |
           swift package resolve
 
-      # 2. Сборка проекта с помощью xcodebuild
+      # Сборка проекта через Swift Package Manager
       - name: Build the app
         script: |
-          xcodebuild clean build -scheme my-swift-project -sdk iphoneos -destination 'platform=iOS Simulator,name=iPhone 14'
+          swift build
 
-      # 3. Архивируем проект
-      - name: Archive with xcodebuild
+      # Архивирование проекта (если нужно)
+      - name: Archive the app
         script: |
+          # Пример использования Xcode для архивирования
           xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
 
     artifacts:
