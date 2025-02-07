@@ -1,6 +1,5 @@
 // swift-tools-version: 6.0
 import PackageDescription
-import AppleProductTypes
 
 let package = Package(
     name: "MyApp",
