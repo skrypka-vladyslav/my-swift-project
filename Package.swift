@@ -1,23 +1,25 @@
-
-// swift-tools-version: 5.9
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
-    name: "MyApp",
+    name: "my-swift-project",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v9)  // Устанавливаем минимальную версию iOS
     ],
     products: [
         .library(
-            name: "MyApp",
-            targets: ["AppModule"]
-        )
+            name: "my-swift-project",
+            targets: ["my-swift-project"]
+        ),
     ],
-    dependencies: [],
     targets: [
         .target(
-            name: "AppModule",
+            name: "my-swift-project",
             dependencies: []
-        )
+        ),
+        .testTarget(
+            name: "my-swift-projectTests",
+            dependencies: ["my-swift-project"]
+        ),
     ]
 )
