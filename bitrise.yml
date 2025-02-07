@@ -18,28 +18,14 @@ workflows:
         script: |
           swift build
 
-      # Шаг 3: Архивация приложения через xcodebuild
-      - name: Archive app with xcodebuild
-        script: |
-          xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
+      # Шаг 3: Архивация приложения и экспорт IPA через встроенный шаг
+      - xcode-archive:
+          inputs:
+            - export_method: "development"
+            - export_options_plist: "$PWD/ExportOptions.plist"
+            - output_dir: "$BITRISE_DEPLOY_DIR"
 
-      # Шаг 4: Экспорт IPA
-      - name: Export IPA from archive
-        script: |
-          xcodebuild -exportArchive -archivePath $PWD/build/my-swift-project.xcarchive -exportOptionsPlist $PWD/ExportOptions.plist -exportPath $PWD/build
-
-      # Шаг 5: Проверка наличия IPA
-      - name: Check if IPA file exists
-        script: |
-          if [ -f "$PWD/build/my-swift-project.ipa" ]; then
-            echo "IPA file found!"
-          else
-            echo "IPA file not found!"
-            exit 1  # Завершаем сборку с ошибкой, если файл не найден
-          fi
-
-      # Шаг 6: Загрузка IPA как артефакт
-      - name: Upload IPA as build artifact
-        script: |
-          echo "Uploading IPA artifact"
-          mv $PWD/build/my-swift-project.ipa $BITRISE_DEPLOY_DIR/
+      # Шаг 4: Загрузка IPA как артефакт
+      - deploy-to-bitrise-io:
+          inputs:
+            - deploy_path: "$BITRISE_DEPLOY_DIR"
