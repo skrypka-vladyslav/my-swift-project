@@ -2,7 +2,7 @@
 <plist version="1.0">
   <dict>
     <key>method</key>
-    <string>app-store</string> <!-- Используйте 'ad-hoc', 'enterprise', 'development' в зависимости от нужд -->
+    <string>development</string>
     <key>uploadSymbols</key>
     <true/>
     <key>compileBitcode</key>
