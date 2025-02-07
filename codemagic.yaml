@@ -31,7 +31,6 @@ workflows:
 
       # Шаг 5: Загрузка IPA как артефакт сборки
       - name: Upload IPA as build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: my-swift-project.ipa
-          path: $PWD/build/my-swift-project.ipa
+        script: |
+          echo "Uploading IPA artifact"
+          mv $PWD/build/my-swift-project.ipa $CM_BUILD_DIR/
