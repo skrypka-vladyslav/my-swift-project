@@ -5,11 +5,6 @@ workflows:
     environment:
       xcode: latest  # Указываем, что используем Xcode для сборки
     scripts:
-      - name: Install dependencies
-        script: |
-          # Установки зависимостей с использованием CocoaPods, если они есть
-          echo "Installing CocoaPods dependencies"
-          pod install  # Устанавливаем зависимости, если используем CocoaPods
       - name: Build the app
         script: |
           # Сборка проекта с использованием Xcode и создания архива .ipa
