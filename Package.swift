@@ -1,10 +1,11 @@
+// swift-tools-version: 6.0
 import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "My App",
+    name: "MyApp",
     platforms: [
-        .iOS("18.0")
+        .iOS(.v16) // Используем поддержку iOS версии 16
     ],
     products: [
         .iOSApplication(
@@ -27,7 +28,7 @@ let package = Package(
         )
     ],
     targets: [
-        .executableTarget(
+        .target( // Используем .target для обычной iOS цели
             name: "AppModule",
             path: ".",
             swiftSettings: [
