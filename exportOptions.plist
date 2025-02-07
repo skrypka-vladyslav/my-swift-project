@@ -7,5 +7,12 @@
     <true/>
     <key>compileBitcode</key>
     <false/>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>provisioningProfiles</key>
+    <dict>
+      <key>YOUR.BUNDLE.ID</key>
+      <string>YOUR_PROVISIONING_PROFILE_NAME</string>
+    </dict>
   </dict>
 </plist>
