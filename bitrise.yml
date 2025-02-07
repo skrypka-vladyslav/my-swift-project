@@ -1,62 +1,54 @@
-format_version: '13'
-default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
-project_type: ios
-workflows:
-  archive_and_export_app:
-    summary: Run your Xcode tests and create an IPA file to install your app on a
-      device or share it with your team.
-    description: The workflow will first clone your Git repository, cache and install
-      your project's dependencies if any, run your Xcode tests, export an IPA file
-      from the project and save it.
+name: Build and Export iOS App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
     steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8: {}
-    - cocoapods-install@2:
-        inputs:
-        - is_cache_disabled: 'true'
-    - xcode-test@5:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-        - test_repetition_mode: retry_on_failure
-        - cache_level: none
-    - xcode-archive@5:
-        inputs:
-        - project_path: "$BITRISE_PROJECT_PATH"
-        - scheme: "$BITRISE_SCHEME"
-        - distribution_method: "$BITRISE_DISTRIBUTION_METHOD"
-        - automatic_code_signing: api-key
-        - cache_level: none
-    - deploy-to-bitrise-io@2: {}
-  run_tests:
-    summary: Run your Xcode tests and get the test report.
-    description: The workflow will first clone your Git repository, cache and install
-      your project's dependencies if any, run your Xcode tests and save the test results.
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8: {}
-    - restore-spm-cache@1: {}
-    - save-spm-cache@1: {}
-    - deploy-to-bitrise-io@2: {}
-    triggers:
-      push:
-      - branch: main
-      pull_request:
-      - source_branch: "*"
-meta:
-  bitrise.io:
-    stack: osx-xcode-16.0.x
-    machine_type_id: g2-m1.4core
-app:
-  envs:
-  - BITRISE_PROJECT_PATH: Package.swift
-    opts:
-      is_expand: false
-  - BITRISE_SCHEME: Debug
-    opts:
-      is_expand: false
-  - BITRISE_DISTRIBUTION_METHOD: development
-    opts:
-      is_expand: false
+      # 1. Клонируем код
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Устанавливаем нужную версию Xcode
+      - name: Set up Xcode
+        uses: apple-actions/setup-xcode@v3
+        with:
+          xcode-version: '16.2'  # Укажите нужную версию Xcode
+
+      # 3. Устанавливаем зависимости через CocoaPods (если используете их)
+      - name: Install CocoaPods dependencies
+        run: |
+          if [ -f "Podfile" ]; then
+            sudo gem install cocoapods
+            pod install
+          fi
+          
+      # 4. Сборка проекта с использованием xcodebuild (build)
+      - name: Build with xcodebuild
+        run: |
+          xcodebuild clean build -project my-swift-project/my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -destination 'platform=iOS Simulator,name=iPhone 14'
+
+      # 5. Архивируем проект с помощью xcodebuild (archive)
+      - name: Archive with xcodebuild
+        run: |
+          xcodebuild archive -project my-swift-project/my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
+
+      # 6. Экспортируем IPA из архива (экспорт)
+      - name: Export IPA with xcodebuild
+        run: |
+          xcodebuild -exportArchive -archivePath $PWD/build/my-swift-project.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
+
+      # 7. Загружаем артефакт IPA
+      - name: Upload IPA as build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: my-swift-project.ipa
+          path: $PWD/build/my-swift-project.ipa
