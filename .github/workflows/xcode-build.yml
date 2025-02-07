@@ -1,4 +1,4 @@
-name: Build with Xcode
+name: Build and Export iOS App
 
 on:
   push:
@@ -24,26 +24,31 @@ jobs:
           xcode-version: '16.2'  # Укажите нужную версию Xcode
 
       # 3. Устанавливаем зависимости через CocoaPods (если используете их)
-      - name: Install dependencies
+      - name: Install CocoaPods dependencies
         run: |
           if [ -f "Podfile" ]; then
             sudo gem install cocoapods
             pod install
           fi
 
-      # 4. Выполняем сборку проекта
+      # 4. Сборка проекта с использованием xcodebuild (build)
       - name: Build with xcodebuild
         run: |
           xcodebuild clean build -project my-swift-project/my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -destination 'platform=iOS Simulator,name=iPhone 14'
 
-      # 5. Архивируем проект (если нужно)
+      # 5. Архивируем проект с помощью xcodebuild (archive)
       - name: Archive with xcodebuild
         run: |
           xcodebuild archive -project my-swift-project/my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
 
-      # 6. Загружаем артефакты сборки
+      # 6. Экспортируем IPA из архива (экспорт)
+      - name: Export IPA with xcodebuild
+        run: |
+          xcodebuild -exportArchive -archivePath $PWD/build/my-swift-project.xcarchive -exportPath $PWD/build -exportOptionsPlist exportOptions.plist
+
+      # 7. Загружаем артефакт IPA
       - name: Upload IPA as build artifact
         uses: actions/upload-artifact@v2
         with:
           name: my-swift-project.ipa
-          path: $PWD/build/my-swift-project.xcarchive
+          path: $PWD/build/my-swift-project.ipa
