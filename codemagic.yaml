@@ -1,20 +1,22 @@
 workflows:
-  ios_build:
-    name: iOS build
-    max_build_duration: 120
-    environment:
-      vars:
-        XCODE_VERSION: "13.2.1"
-        FLUTTER_CHANNEL: "stable"
+  ios:
+    name: Build iOS App with Swift Package Manager
+    max_build_duration: 60
     scripts:
-      - name: Install dependencies
+      # 1. Устанавливаем зависимости через Swift Package Manager
+      - name: Install dependencies with SPM
         script: |
-          git clone https://github.com/flutter/flutter.git /flutter
-          export PATH=$PATH:/flutter/bin
-          flutter doctor
-      - name: Build app
+          swift package resolve
+
+      # 2. Сборка проекта с помощью xcodebuild
+      - name: Build the app
         script: |
-          swift build
-      - name: Export IPA
+          xcodebuild clean build -scheme my-swift-project -sdk iphoneos -destination 'platform=iOS Simulator,name=iPhone 14'
+
+      # 3. Архивируем проект
+      - name: Archive with xcodebuild
         script: |
-          xcodebuild archive -scheme "my-swift-project" -workspace "my-swift-project.xcworkspace" -sdk iphoneos -archivePath $CM_BUILD_DIR/my-swift-project.xcarchive
+          xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
+
+    artifacts:
+      - $PWD/build/my-swift-project.xcarchive
