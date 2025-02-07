@@ -19,7 +19,7 @@ jobs:
 
       # 2. Устанавливаем нужную версию Xcode
       - name: Set up Xcode
-        uses: apple-actions/setup-xcode@v2
+        uses: apple-actions/setup-xcode@v4
         with:
           xcode-version: '16.2'  # Укажите нужную версию Xcode
 
@@ -48,7 +48,7 @@ jobs:
 
       # 7. Загружаем артефакт IPA
       - name: Upload IPA as build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: my-swift-project.ipa
           path: $PWD/build/my-swift-project.ipa
