@@ -6,27 +6,32 @@ workflows:
     environment:
       vars:
         MY_VAR: 'value'  # Переменные окружения, если нужно
-    scripts:
-      # Шаг 1: Устанавливаем зависимости (если они есть)
-      - name: Install dependencies
-        script: |
-          # Если у вас есть файл Podfile для CocoaPods
-          if [ -f "Podfile" ]; then
-            sudo gem install cocoapods
-            pod install
-          fi
 
-      # Шаг 2: Резолвим зависимости через Swift Package Manager
+    # Этапы скриптов сборки
+    scripts:
+      # Шаг 1: Устанавливаем зависимости с помощью Swift Package Manager
       - name: Resolve Swift dependencies
         script: |
           swift package resolve
 
-      # Шаг 3: Сборка проекта через Swift Package Manager
+      # Шаг 2: Сборка проекта через Swift Package Manager
       - name: Build project with Swift Package Manager
         script: |
           swift build
 
-      # Шаг 4: Тестирование (если нужно)
-      - name: Run tests
+      # Шаг 3: Архивация приложения с использованием xcodebuild
+      - name: Archive app with xcodebuild
         script: |
-          swift test
+          xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
+
+      # Шаг 4: Экспорт IPA
+      - name: Export IPA from archive
+        script: |
+          xcodebuild -exportArchive -archivePath $PWD/build/my-swift-project.xcarchive -exportOptionsPlist $PWD/ExportOptions.plist -exportPath $PWD/build
+
+      # Шаг 5: Загрузка IPA как артефакт сборки
+      - name: Upload IPA as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-swift-project.ipa
+          path: $PWD/build/my-swift-project.ipa
