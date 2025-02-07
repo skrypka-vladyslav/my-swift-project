@@ -1,29 +1,29 @@
-name: Xcode Build
+name: Build with Xcode
 
 on:
   push:
     branches:
-      - main   # Запускается при пуше в ветку main
+      - main
   pull_request:
     branches:
-      - main   # Запускается при pull request в ветку main
+      - main
 
 jobs:
   build:
-    runs-on: macos-latest  # Используем macOS runner, так как сборка iOS-приложений требует macOS
+    runs-on: macos-latest
 
     steps:
-      # Шаг 1: Проверяем код
+      # 1. Клонируем код
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Шаг 2: Настроим Xcode (Устанавливаем нужную версию Xcode)
+      # 2. Устанавливаем нужную версию Xcode
       - name: Set up Xcode
         uses: apple-actions/setup-xcode@v2
         with:
           xcode-version: '16.2'  # Укажите нужную версию Xcode
 
-      # Шаг 3: Установка зависимостей (если есть Podfile)
+      # 3. Устанавливаем зависимости через CocoaPods (если используете их)
       - name: Install dependencies
         run: |
           if [ -f "Podfile" ]; then
@@ -31,20 +31,19 @@ jobs:
             pod install
           fi
 
-      # Шаг 4: Выполняем сборку проекта
+      # 4. Выполняем сборку проекта
       - name: Build with xcodebuild
         run: |
           xcodebuild clean build -project my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -destination 'platform=iOS Simulator,name=iPhone 14'
 
-      # Шаг 5: Архивируем приложение (опционально)
+      # 5. Архивируем проект (если нужно)
       - name: Archive with xcodebuild
         run: |
           xcodebuild archive -project my-swift-project.xcodeproj -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
 
-      # Шаг 6: Загружаем артефакты сборки (например .ipa)
+      # 6. Загружаем артефакты сборки
       - name: Upload IPA as build artifact
         uses: actions/upload-artifact@v2
         with:
           name: my-swift-project.ipa
           path: $PWD/build/my-swift-project.xcarchive
-
