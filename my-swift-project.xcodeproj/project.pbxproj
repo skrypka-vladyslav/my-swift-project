@@ -1,1 +1,84 @@
+// !$*UTF8*$!
+{
+    archiveVersion = 1;
+    classes = {
+    };
+    objectVersion = 46;
+    objects = {
+        /* Begin PBXBuildFile section */
+        /* End PBXBuildFile section */
+        /* Begin PBXFileReference section */
+        1 = {
+            isa = PBXFileReference;
+            lastKnownFileType = sourcecode.swift;
+            name = main.swift;
+            path = main.swift;
+            sourceTree = "<group>";
+        };
+        /* End PBXFileReference section */
+        /* Begin PBXGroup section */
+        2 = {
+            isa = PBXGroup;
+            children = (
+                1,
+            );
+            name = my-swift-project;
+            sourceTree = "<group>";
+        };
+        /* End PBXGroup section */
+        /* Begin PBXProject section */
+        3 = {
+            isa = PBXProject;
+            buildConfigurationList = 4;
+            compatibilityVersion = "Xcode 3.2";
+            developmentRegion = English;
+            name = my-swift-project;
+            projectDirPath = "";
+            projectRoot = "";
+            targets = (
+                5,
+            );
+        };
+        /* End PBXProject section */
+        /* Begin PBXTargetDependency section */
+        /* End PBXTargetDependency section */
+        /* Begin PBXBuildConfiguration section */
+        4 = {
+            isa = PBXBuildConfiguration;
+            buildSettings = {
+                GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1;
+                IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+                SDKROOT = iphoneos;
+            };
+            name = Debug;
+        };
+        /* End PBXBuildConfiguration section */
+        /* Begin PBXTarget section */
+        5 = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = 4;
+            buildPhases = (
+                6,
+            );
+            buildRules = (
+            );
+            dependencies = (
+            );
+            name = my-swift-project;
+            productName = my-swift-project;
+            productType = com.apple.product-type.application;
+        };
+        /* End PBXTarget section */
+        /* Begin PBXBuildPhase section */
+        6 = {
+            isa = PBXSourcesBuildPhase;
+            files = (
+                1,
+            );
+            runOnlyForDeploymentPostprocessing = 0;
+        };
+        /* End PBXBuildPhase section */
+    };
+    rootObject = 3;
+}
 
