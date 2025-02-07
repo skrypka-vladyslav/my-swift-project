@@ -30,7 +30,7 @@
         3 = {
             isa = PBXProject;
             buildConfigurationList = 4;
-            compatibilityVersion = "Xcode 3.2";
+            compatibilityVersion = "Xcode 16.2";
             developmentRegion = English;
             name = my-swift-project;
             projectDirPath = "";
