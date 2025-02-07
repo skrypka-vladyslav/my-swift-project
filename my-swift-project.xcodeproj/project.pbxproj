@@ -46,7 +46,7 @@
         4 = {
             isa = PBXBuildConfiguration;
             buildSettings = {
-                GCC_PREPROCESSOR_DEFINITIONS = DEBUG=1;
+                SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
                 IPHONEOS_DEPLOYMENT_TARGET = 9.0;
                 SDKROOT = iphoneos;
             };
@@ -81,4 +81,3 @@
     };
     rootObject = 3;
 }
-
