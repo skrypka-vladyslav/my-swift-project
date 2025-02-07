@@ -7,27 +7,13 @@ let package = Package(
         .iOS(.v16) // Используем поддержку iOS версии 16
     ],
     products: [
-        .iOSApplication(
-            name: "My App",
-            targets: ["AppModule"],
-            displayVersion: "1.0",
-            bundleVersion: "1",
-            appIcon: .placeholder(icon: .moon),
-            accentColor: .presetColor(.teal),
-            supportedDeviceFamilies: [
-                .pad,
-                .phone
-            ],
-            supportedInterfaceOrientations: [
-                .portrait,
-                .landscapeRight,
-                .landscapeLeft,
-                .portraitUpsideDown(.when(deviceFamilies: [.pad]))
-            ]
+        .application(
+            name: "My App", // Заменяем .iOSApplication на .application
+            targets: ["AppModule"]
         )
     ],
     targets: [
-        .target( // Используем .target для обычной iOS цели
+        .target(
             name: "AppModule",
             path: ".",
             swiftSettings: [
