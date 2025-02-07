@@ -15,11 +15,7 @@ let package = Package(
     targets: [
         .target(
             name: "my-swift-project",
-            path: "."  // Указываем путь к текущей директории для поиска исходников
-        ),
-        .testTarget(
-            name: "my-swift-projectTests",
-            dependencies: ["my-swift-project"]
+            path: "."  // Путь к исходным файлам
         ),
     ]
 )
