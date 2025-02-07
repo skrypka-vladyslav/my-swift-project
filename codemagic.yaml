@@ -33,4 +33,4 @@ workflows:
       - name: Upload IPA as build artifact
         script: |
           echo "Uploading IPA artifact"
-          mv $PWD/build/my-swift-project.ipa $CM_BUILD_DIR/
+          mv $PWD/build/my-swift-project.ipa $BITRISE_DEPLOY_DIR/
