@@ -1,5 +1,6 @@
 import SwiftUI
 
+@available(macOS 11.0, *)  // Указываем, что поддерживаем только macOS 11.0 и выше
 struct CourseSelectionView: View {
     @State private var selectedCourse: Course?
     
