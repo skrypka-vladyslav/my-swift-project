@@ -1,31 +1,64 @@
 workflows:
-  ios:
-    name: iOS Workflow
-    instance_type: mac_mini
-    max_build_duration: 60
-    environment:
-      vars:
-        MY_VAR: 'value'
+  archive_and_export_app:
+    summary: Run your Xcode tests and create an IPA file to install your app on a device or share it with your team.
+    description: The workflow will first clone your Git repository, cache and install your project's dependencies if any, run your Xcode tests, export an IPA file from the project and save it.
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - cocoapods-install@2:
+        inputs:
+        - is_cache_disabled: 'true'
+    - xcode-test@5:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+        - test_repetition_mode: retry_on_failure
+        - cache_level: none
+    - xcode-archive@5:
+        inputs:
+        - project_path: "$BITRISE_PROJECT_PATH"
+        - scheme: "$BITRISE_SCHEME"
+        - distribution_method: "$BITRISE_DISTRIBUTION_METHOD"
+        - automatic_code_signing: api-key
+        - cache_level: none
+    - xcode-export@1:  # Новый шаг для экспорта IPA
+        inputs:
+        - archive_path: "$BITRISE_XCODE_ARCHIVE_PATH"
+        - export_method: "development"
+        - export_options_plist: "$BITRISE_SOURCE_DIR/ExportOptions.plist" # Используй свой ExportOptions.plist
+    - deploy-to-bitrise-io@2: {}
 
-    scripts:
-      # Шаг 1: Установка зависимостей через Swift Package Manager
-      - name: Resolve Swift dependencies
-        script: |
-          swift package resolve
+  run_tests:
+    summary: Run your Xcode tests and get the test report.
+    description: The workflow will first clone your Git repository, cache and install your project's dependencies if any, run your Xcode tests and save the test results.
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - restore-spm-cache@1: {}
+    - save-spm-cache@1: {}
+    - deploy-to-bitrise-io@2: {}
 
-      # Шаг 2: Сборка проекта через Swift Package Manager
-      - name: Build project with Swift Package Manager
-        script: |
-          swift build
+triggers:
+  push:
+    - branch: main
+  pull_request:
+    - source_branch: "*"
 
-      # Шаг 3: Архивация приложения и экспорт IPA через встроенный шаг
-      - xcode-archive:
-          inputs:
-            - export_method: "development"
-            - export_options_plist: "$PWD/ExportOptions.plist"
-            - output_dir: "$BITRISE_DEPLOY_DIR"
+meta:
+  bitrise.io:
+    stack: osx-xcode-16.0.x
+    machine_type_id: g2-m1.4core
 
-      # Шаг 4: Загрузка IPA как артефакт
-      - deploy-to-bitrise-io:
-          inputs:
-            - deploy_path: "$BITRISE_DEPLOY_DIR"
+app:
+  envs:
+    - BITRISE_PROJECT_PATH: Package.swift
+      opts:
+        is_expand: false
+    - BITRISE_SCHEME: Debug
+      opts:
+        is_expand: false
+    - BITRISE_DISTRIBUTION_METHOD: development
+      opts:
+        is_expand: false
