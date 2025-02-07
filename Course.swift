@@ -1,9 +1,9 @@
-// Course.swift
+
 import SwiftUI
 
-struct Course {
+struct Course: Identifiable, Codable {
+    var id = UUID()
     var name: String
     var description: String
-    var imageName: String // или imageUrl, если используете URL
+    var imageName: String
 }
-

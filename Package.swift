@@ -1,24 +1,23 @@
-// swift-tools-version: 6.0
+
+// swift-tools-version: 5.9
 import PackageDescription
 
 let package = Package(
     name: "MyApp",
     platforms: [
-        .iOS(.v16) // Используем поддержку iOS версии 16
+        .iOS(.v15)
     ],
     products: [
-        .application(
-            name: "My App", // Заменяем .iOSApplication на .application
+        .library(
+            name: "MyApp",
             targets: ["AppModule"]
         )
     ],
+    dependencies: [],
     targets: [
         .target(
             name: "AppModule",
-            path: ".",
-            swiftSettings: [
-                .enableUpcomingFeature("BareSlashRegexLiterals")
-            ]
+            dependencies: []
         )
     ]
 )
