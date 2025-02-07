@@ -9,16 +9,15 @@ workflows:
         script: |
           # Сборка проекта с использованием Xcode и создания архива .ipa
           xcodebuild clean archive \
-            -workspace "my-swift-project.xcworkspace" \  # Указываем правильный путь к рабочему пространству
+            -project "my-swift-project.xcodeproj" \  # Используем .xcodeproj вместо .xcworkspace
             -scheme "my-swift-project" \  # Указываем правильную схему
             -sdk iphoneos \
             -archivePath "$PWD/build/my-swift-project.xcarchive"
       - name: Export IPA
         script: |
-          # Экспорт .ipa файла из .xcarchive
+          # Экспорт .ipa файла из .xcarchive без использования ExportOptions.plist
           xcodebuild -exportArchive \
             -archivePath "$PWD/build/my-swift-project.xcarchive" \
-            -exportOptionsPlist "$PWD/my-swift-project/ExportOptions.plist" \
             -exportPath "$PWD/build/ios/iphoneos"
     artifacts:
       - build/ios/iphoneos/*.ipa  # Указываем путь для артефактов
