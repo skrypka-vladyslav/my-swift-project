@@ -35,7 +35,7 @@ workflows:
             echo "IPA file found!"
           else
             echo "IPA file not found!"
-            exit 1
+            exit 1  # Завершаем сборку с ошибкой, если файл не найден
           fi
 
       # Шаг 6: Загрузка IPA как артефакт
