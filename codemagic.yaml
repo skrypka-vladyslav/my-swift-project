@@ -1,23 +1,32 @@
 workflows:
   ios:
-    name: Build iOS App with Swift Package Manager
-    max_build_duration: 60
+    name: iOS Workflow
+    instance_type: mac_mini
+    max_build_duration: 60  # Максимальное время сборки
+    environment:
+      vars:
+        MY_VAR: 'value'  # Переменные окружения, если нужно
     scripts:
-      # Устанавливаем зависимости через Swift Package Manager
-      - name: Install dependencies with SPM
+      # Шаг 1: Устанавливаем зависимости (если они есть)
+      - name: Install dependencies
+        script: |
+          # Если у вас есть файл Podfile для CocoaPods
+          if [ -f "Podfile" ]; then
+            sudo gem install cocoapods
+            pod install
+          fi
+
+      # Шаг 2: Резолвим зависимости через Swift Package Manager
+      - name: Resolve Swift dependencies
         script: |
           swift package resolve
 
-      # Сборка проекта через Swift Package Manager
-      - name: Build the app
+      # Шаг 3: Сборка проекта через Swift Package Manager
+      - name: Build project with Swift Package Manager
         script: |
           swift build
 
-      # Архивирование проекта (если нужно)
-      - name: Archive the app
+      # Шаг 4: Тестирование (если нужно)
+      - name: Run tests
         script: |
-          # Пример использования Xcode для архивирования
-          xcodebuild archive -scheme my-swift-project -sdk iphoneos -archivePath $PWD/build/my-swift-project.xcarchive
-
-    artifacts:
-      - $PWD/build/my-swift-project.xcarchive
+          swift test
