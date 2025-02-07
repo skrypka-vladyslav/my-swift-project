@@ -1,5 +1,5 @@
 import SwiftUI
-
+@available(macOS 11.0, *)
 struct RegistrationView: View {
     @State private var name = ""
     @State private var email = ""
