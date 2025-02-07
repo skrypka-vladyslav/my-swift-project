@@ -8,13 +8,14 @@ workflows:
       - name: Install dependencies
         script: |
           # Установки зависимостей с использованием CocoaPods, если они есть
-          echo "No dependencies for Swift project"
+          echo "Installing CocoaPods dependencies"
+          pod install  # Устанавливаем зависимости, если используем CocoaPods
       - name: Build the app
         script: |
           # Сборка проекта с использованием Xcode и создания архива .ipa
           xcodebuild clean archive \
-            -workspace "my-swift-project.xcworkspace" \
-            -scheme "my-swift-project" \
+            -workspace "my-swift-project.xcworkspace" \  # Указываем правильный путь к рабочему пространству
+            -scheme "my-swift-project" \  # Указываем правильную схему
             -sdk iphoneos \
             -archivePath "$PWD/build/my-swift-project.xcarchive"
       - name: Export IPA
