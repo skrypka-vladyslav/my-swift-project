@@ -1,23 +1,16 @@
 workflows:
   ios:
-    name: Build iOS app
+    name: iOS Build
     max_build_duration: 60
     environment:
+      flutter: stable
       xcode: latest
     scripts:
-      - name: Build the app
+      - name: Install Swift
         script: |
-          # Сборка проекта с использованием Xcode и создания архива .ipa
-          xcodebuild clean archive \
-            -project "my-swift-project.xcodeproj" \
-            -scheme "my-swift-project" \
-            -sdk iphoneos \
-            -archivePath "$PWD/build/my-swift-project.xcarchive"
-      - name: Export IPA
+          curl -s https://get.sdkman.io | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install swift
+      - name: Build
         script: |
-          # Экспорт .ipa файла из .xcarchive
-          xcodebuild -exportArchive \
-            -archivePath "$PWD/build/my-swift-project.xcarchive" \
-            -exportPath "$PWD/build/ios/iphoneos"
-    artifacts:
-      - build/ios/iphoneos/*.ipa  # Указываем путь для артефактов
+          swift build
